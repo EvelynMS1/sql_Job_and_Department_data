@@ -293,37 +293,37 @@ function viewAllRoles() {
   });
 }
 
-// function getDepartments(answers) {
-//   //need to get the id with the role
-//   db.query("SELECT id, name FROM department", function (err, results) {
-//     if (err) {
-//       console.error(err);
-//     } else {
-//       console.table(results);
-//       const choices = results.map((result) => ({
-//         name: `${result.name}`,
-//         //if value null the it is a manager
+function getDepartments(answers) {
+  //need to get the id with the role
+  db.query("SELECT id, name FROM department", function (err, results) {
+    if (err) {
+      console.error(err);
+    } else {
+      console.table(results);
+      const choices = results.map((result) => ({
+        name: `${result.name}`,
+        //if value null the it is a manager
 
-//         value: result.id,
-//       }));
-//       inquirer
-//         .prompt({
-//           type: "list",
-//           name: "selectDep",
-//           message: "Select an Department:",
-//           choices: choices,
-//         })
-//         .then((answer) => {
-//           const selectdep = answer.selectDep;
-//           console.log("Selected Department:", selectdep);
-//           // updateEmployeeRole(employeeid,selectedrole);
-//           // addRole(answers, selectdep)
-//           addRoleQuestions(answer.selectDep);
+        value: result.id,
+      }));
+      inquirer
+        .prompt({
+          type: "list",
+          name: "selectDep",
+          message: "Select an Department:",
+          choices: choices,
+        })
+        .then((answer) => {
+          const selectdep = answer.selectDep;
+          console.log("Selected Department:", selectdep);
+          // updateEmployeeRole(employeeid,selectedrole);
+          // addRole(answers, selectdep)
+          addRoleQuestions(answer.selectDep);
 
-//         });
-//     }
-//   });
-// }
+        });
+    }
+  });
+}
 
 function getDepartmentforupdateEmployee(answers) {
   //need to get the id with the role
