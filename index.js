@@ -6,16 +6,12 @@ const inquirer = require("inquirer");
 const db = mysql.createConnection(
   {
     host: "localhost",
-    // MySQL username,
-    user: "root",
-    // MySQL password
-    password: "ce$#630o485lo59#",
-    //
-    database: "employeeTracker",
   },
   console.log(`Connected to the employeeTracker database.`)
 );
 
+
+//verification for type of integer inquirer 
 const promptQuestions = [
   {
     type: "list",
