@@ -1,17 +1,21 @@
 // Import and require mysql2 for mysql connection
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
+require("dotenv").config();
 
 // Connect to database
 const db = mysql.createConnection(
   {
-    host: "localhost",
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
   },
   console.log(`Connected to the employeeTracker database.`)
 );
 
 
-//verification for type of integer inquirer 
+
+//verification for type of integer inquirer
 const promptQuestions = [
   {
     type: "list",
@@ -181,7 +185,6 @@ function getEmployees(answers) {
           })
           .then((answer) => {
             const selectedEmployee = answer.selectedEmployee;
-            console.log("Selected employee:", selectedEmployee);
             getRole(selectedEmployee);
             // You can perform further operations with the selected employee here
           })
@@ -239,7 +242,6 @@ function getRole(employeeid) {
         })
         .then((answer) => {
           const selectedrole = answer.selectedRole;
-          console.log("Selected Role:", selectedrole);
           getManager(employeeid, selectedrole);
 
           // updateEmployeeRole(employeeid, selectedrole);
@@ -268,7 +270,6 @@ function getManager(employeeid, selectedrole) {
           })
           .then((answer) => {
             const selectedmanager = answer.selectedManager;
-            console.log("Selected manager:", selectedmanager);
             updateEmployeeRole(employeeid, selectedrole, selectedmanager);
 
             // updateEmployeeRole(employeeid, selectedrole);
@@ -314,8 +315,7 @@ function getDepartments(answers) {
           console.log("Selected Department:", selectdep);
           // updateEmployeeRole(employeeid,selectedrole);
           // addRole(answers, selectdep)
-          addRoleQuestions(answer.selectDep);
-
+          addRoleQuestions(answer.selectdep);
         });
     }
   });
