@@ -13,8 +13,29 @@ const db = mysql.createConnection(
   console.log(`Connected to the employeeTracker database.`)
 );
 
+const employeeTableQuery = `
+    SELECT 
+      employee.id, 
+      employee.first_name, 
+      employee.last_name, 
+      role.title AS role_title, 
+      CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name
+    FROM 
+      employee
+    LEFT JOIN role ON employee.role_id = role.id
+    LEFT JOIN employee AS manager ON employee.manager_id = manager.id;
+  `;
 
-
+const departmentNameQuery = `
+    SELECT 
+      role.id, 
+      role.title, 
+      role.salary, 
+      department.name AS department_name
+    FROM 
+      role
+    LEFT JOIN department ON role.department_id = department.id;
+  `;
 //verification for type of integer inquirer
 const promptQuestions = [
   {
@@ -152,7 +173,8 @@ function tablemainMenu() {
 }
 
 function viewAllEmployees() {
-  db.query("SELECT * FROM employee", function (error, results) {
+  // "SELECT * FROM employee"
+  db.query(employeeTableQuery, function (error, results) {
     if (error) {
       console.error(error);
     } else {
@@ -170,7 +192,6 @@ function getEmployees(answers) {
       if (error) {
         console.error(error);
       } else {
-        console.table(results);
         const choices = results.map((result) => ({
           name: `${result.first_name} ${result.last_name}`,
           value: result.id, // You can use the entire result object as the value if needed
@@ -279,7 +300,7 @@ function getManager(employeeid, selectedrole) {
   }
 }
 function viewAllRoles() {
-  db.query("SELECT * FROM role", function (error, results) {
+  db.query(departmentNameQuery, function (error, results) {
     if (error) {
       console.error(error);
     } else {
@@ -296,7 +317,6 @@ function getDepartments(answers) {
     if (err) {
       console.error(err);
     } else {
-      console.table(results);
       const choices = results.map((result) => ({
         name: `${result.name}`,
         //if value null the it is a manager
@@ -312,7 +332,6 @@ function getDepartments(answers) {
         })
         .then((answer) => {
           const selectdep = answer.selectDep;
-          console.log("Selected Department:", selectdep);
           // updateEmployeeRole(employeeid,selectedrole);
           // addRole(answers, selectdep)
           addRoleQuestions(answer.selectdep);
@@ -374,7 +393,6 @@ function addDepartment(answers) {
       if (error) {
         console.error(error);
       } else {
-        console.log(results);
         tablemainMenu();
       }
     }
@@ -430,7 +448,6 @@ function addEmployee(answers) {
       if (error) {
         console.error(error);
       } else {
-        console.log(results);
         tablemainMenu();
       }
     }
